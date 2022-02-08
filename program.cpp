@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <string>
 using namespace std;
 
 fstream FILE_A;
@@ -24,6 +25,14 @@ struct Data_b{
 	short TotalMahasiswaJurusan;
 	
 }resume,tampilB;
+
+//Kamus Data Global
+
+string var_jur;
+int Tot_prodi_di_jur,
+	Tot_prodi_mayo_p,
+	Tot_mhs_di_jur;
+
 
 void inputdata(){
 
@@ -121,29 +130,32 @@ void tampildata(){
  void Resume(){
 	
 	FILE_A.open("file_A.DAT", ios::binary | ios::in );
-	FILE_B.open("file_B.DAT", ios::binary | ios::out | ios::in | ios::app);
+	FILE_B.open("file_B.DAT", ios::binary | ios::out | ios::in);
 	
 	
 	FileKeStruct();
 	
 	while(!FILE_A.eof()){
-	
-	resume.jurusan = tampilFile.jurusan;
-	
-		while((!FILE_A.eof()) && (resume.jurusan == tampilFile.jurusan)){
-			
-			resume.TotProdi = resume.TotProdi + 1;
-			resume.TotalMahasiswaJurusan = resume.TotalMahasiswaJurusan + tampilFile.jmlwanita + tampilFile.jmlpria;
-			cout << resume.TotalMahasiswaJurusan << endl;
-			
-			if(tampilFile.jmlwanita < tampilFile.jmlpria){
-				resume.JumlahMayoritasPria = resume.JumlahMayoritasPria + 1;
-			}	
-			break;
-		}
+		strcpy(var_jur, tampilFile.jurusan);
+		Tot_prodi_di_jur = 0;
+		Tot_prodi_mayo_p = 0;
+		Tot_mhs_di_jur = 0;
 		
-		FILE_B << resume.jurusan << " | " << resume.TotProdi << " | " 
-		<< resume.JumlahMayoritasPria << " | " << resume.TotalMahasiswaJurusan;
+		while(!FILE_A.eof() && strcmpy(tampilFile.jurusan,var_jur) == 0){
+			
+			Tot_prodi_di_jur += 1;
+			Tot_mhs_di_jur = Tot_mhs_di_jur + tampilFile.jmlpria + tampilFile.jmlwanita;
+			if(tampilFile.jmlwanita < tampilFile.jmlpria){
+				Tot_prodi_mayo_p += 1;
+			}	
+		}
+		strcpy(resume.jurusan,var_jur);
+		resume.TotProdi = Tot_prodi_di_jur;
+		resume.JumlahMayoritasPria = Tot_prodi_mayo_p;
+		resume.TotalMahasiswaJurusan = Tot_mhs_di_jur;
+		
+		FILE_B << resume.jurusan << ";" << resume.TotProdi <<  ";"
+		<< resume.JumlahMayoritasPria <<  ";" << resume.TotalMahasiswaJurusan;
 	
 		cout << resume.jurusan << " | " << resume.TotProdi << " | " 
 		<< resume.JumlahMayoritasPria << " | " << resume.TotalMahasiswaJurusan << endl;
