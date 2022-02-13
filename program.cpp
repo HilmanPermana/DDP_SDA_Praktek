@@ -7,37 +7,110 @@ using namespace std;
 fstream FILE_A;
 fstream FILE_B;
 //Struk FILE A
-struct Data_A{
+struct Data_a{
 	
-	char Kelas[4];
-	char NIM[10];
-	char Gol_Darah[3];
-	char JK;
+	char jurusan[4];
+	char prodi[20];
+	short jmlwanita;
+	short jmlpria;
 	
 }inputkeFile,tampilFile;
 
 //Struk FILE B (Hasil Resume)
-struct Data_B{
+struct Data_b{
 	
-	char Gol_Darah[3];
-	int   Jml_Pria,Jml_Wanita;
+	char jurusan[4];
+	short TotProdi;
+	short JumlahMayoritasPria;
+	short TotalMahasiswaJurusan;
 	
 }resume,tampilB;
 
 /*Kamus Data Global*/
-char Var_Golongan_Darah[4];
-int TotalGolDarahPria,
-	TotalGolDarahWanita;
+char var_jur[4];
+int Tot_prodi_di_jur,
+	Tot_prodi_mayo_p,
+	Tot_mhs_di_jur;
+
+void inputdata(){
+
+
+	FILE_A.open("file_A.DAT",  ios::out | ios::app | ios::binary);
 	
+	cout << "\t\t\t\t<><><><><><><> MASUKKAN DATA MAHASISWA <><><><><><><>" << endl;
+	
+	
+	//Jurusan JTE
+	cout << "Masukkan nama jurusan pertama : ";
+	gets(inputkeFile.jurusan);
+	
+		//Input jumlah prodi
+		short tot_prodiJTE;
+		cout << "\nJumlah prodi : ";
+		cin >> tot_prodiJTE;
+	
+		//Input nama setiap prodi
+		for(short i=1;i<=tot_prodiJTE;i++){
+			cout << "\nNama prodi  ke - " << i << " : ";
+			fflush(stdin);
+			gets(inputkeFile.prodi);
+		
+			//Input jumlah pria
+			cout << "\nJumlah mahasiswa pria = ";
+			cin >> inputkeFile.jmlpria;
+			
+			//Input jumlah wanita
+			cout << "\nJumlah mahasiswa wanita = ";
+			cin >> inputkeFile.jmlwanita;
+			
+		FILE_A << inputkeFile.jurusan <<" "<< inputkeFile.prodi <<" "
+			<< inputkeFile.jmlpria <<" "<< inputkeFile.jmlwanita << endl;
+		}
+	
+	
+	//Jurusan JTK
+	system("cls");
+	cout << "\t\t\t\t<><><><><><><> MASUKKAN DATA MAHASISWA <><><><><><><>" << endl;
+	cout << "Masukkan nama jurusan kedua : ";
+	fflush(stdin);
+	gets(inputkeFile.jurusan);
+	
+		//Input jumlah prodi
+		short tot_prodiJTK;
+		cout << "\nJumlah prodi : ";
+		cin >> tot_prodiJTK;
+	
+		//Input nama setiap prodi
+		for(short j=1;j<=tot_prodiJTK;j++){
+			cout << "\nNama prodi ke - " << j << " : ";
+			fflush(stdin);
+			gets(inputkeFile.prodi);
+			
+			//Input jumlah pria
+			cout << "\nJumlah mahasiswa pria = ";
+			cin >> inputkeFile.jmlpria;
+			
+			//Input jumlah wanita
+			cout << "\nJumlah mahasiswa wanita = ";
+			cin >> inputkeFile.jmlwanita;
+			
+			FILE_A << inputkeFile.jurusan <<" "<< inputkeFile.prodi <<" "
+			<< inputkeFile.jmlpria <<" "<< inputkeFile.jmlwanita << endl;
+		}
+
+	FILE_A.close();
+}
+
 void FileKeStruct(){
 	
-		FILE_A >> tampilFile.Kelas;
-		FILE_A >> tampilFile.NIM;
-		FILE_A >> tampilFile.Gol_Darah;
-		FILE_A >> tampilFile.JK;
+		FILE_A >> tampilFile.jurusan;
+		FILE_A >> tampilFile.prodi;
+		FILE_A >> tampilFile.jmlpria;
+		FILE_A >> tampilFile.jmlwanita;
 	
 }
 
+//Prosedur tampil data ke console
 void tampildata(){
 	
 	system("cls");
@@ -51,50 +124,14 @@ void tampildata(){
 	
 		
 		FileKeStruct();
-		cout << " | " << tampilFile.Kelas << " | " << tampilFile.NIM 
-		<< " | "<< tampilFile.Gol_Darah << " | " << tampilFile.JK << " | ";
+		cout << " | " << tampilFile.jurusan << " | " << tampilFile.prodi 
+		<< " | "<< tampilFile.jmlpria << " | " << tampilFile.jmlwanita << " | ";
 		
 		cout << endl;
 		
 	}
 	FILE_A.close();
 }
-
-void inputdata(){
-
-	int pilih;
-	int total_mahasiswa;
-	FILE_A.open("file_A.DAT",  ios::out | ios::app | ios::binary);
-	
-	cout << "\t\t\t\t<><><><><><><> MASUKKAN DATA <><><><><><><>" << endl;
-	
-	cout << " Total Data Mahasiswa : ";
-	cin  >> total_mahasiswa;
-	
-	for(int i=1;i<=total_mahasiswa;i++){
-	
-	system("cls");
-	cout << " === Input Data Mahasiswa ke - " << i << " ===" << endl;
-	fflush(stdin);
-	cout<<"Masukan Kelas = ";
-	gets(inputkeFile.Kelas);
-	cout << endl;
-	cout<<"Masukkan NIM = ";
-	gets(inputkeFile.NIM);
-	cout << endl;
-	cout<<"Masukkan Golongan Darah = ";
-	gets(inputkeFile.Gol_Darah);
-	cout << endl;
-	cout<<"Masukkan Jenis Kelamin = ";
-	cin >> inputkeFile.JK;
-	
-	FILE_A << inputkeFile.Kelas <<";"<< inputkeFile.NIM <<";"
-	<< inputkeFile.Gol_Darah <<";"<< inputkeFile.JK << endl;
-	
-	}
-	FILE_A.close();
-}
-
 
 void Resume(){
 	
@@ -111,38 +148,36 @@ void Resume(){
 	
 	while(!FILE_A.eof()){
 		
-		strcpy(Var_Golongan_Darah,tampilFile.Gol_Darah);
-		TotalGolDarahPria = 0;
-		TotalGolDarahWanita = 0;
-	
+		strcpy(var_jur,tampilFile.jurusan);
+		Tot_prodi_di_jur = 0;
+		Tot_prodi_mayo_p = 0;
+		Tot_mhs_di_jur = 0;
 		
-		while(!FILE_A.eof() && strcmp(tampilFile.Gol_Darah,Var_Golongan_Darah) == 0){
+		while(!FILE_A.eof() && strcmp(tampilFile.jurusan,var_jur) == 0){
 			
-			TotalGolDarahPria += 1;
-			TotalGolDarahWanita += 1;
+			Tot_prodi_di_jur += 1;
+			Tot_mhs_di_jur = Tot_mhs_di_jur + tampilFile.jmlpria + tampilFile.jmlwanita;
 			
-			if(tampilFile.JK == 'P'){
-				TotalGolDarahPria += 1;
-			} else if (tampilFile.JK == 'W'){
-				TotalGolDarahWanita += 1;
-			}
-			
+			if(tampilFile.jmlwanita<tampilFile.jmlpria){
+				Tot_prodi_mayo_p += 1;
+			}	
 			FileKeStruct();
 		}
-		strcpy(resume.Gol_Darah,Var_Golongan_Darah);
-		resume.Jml_Pria = TotalGolDarahPria;
-		resume.Jml_Wanita = TotalGolDarahWanita;
+	
+		strcpy(resume.jurusan,var_jur);
+		resume.TotProdi = Tot_prodi_di_jur;
+		resume.JumlahMayoritasPria = Tot_prodi_mayo_p;
+		resume.TotalMahasiswaJurusan = Tot_mhs_di_jur;
 		
-		FILE_B << resume.Gol_Darah << ";" << resume.Jml_Pria <<  ";"
-		<< resume.Jml_Wanita;
+		FILE_B << resume.jurusan << ";" << resume.TotProdi <<  ";"
+		<< resume.JumlahMayoritasPria <<  ";" << resume.TotalMahasiswaJurusan;
 		
-		cout << " | "<< resume.Gol_Darah << " | " << resume.Jml_Pria << " | " 
-		<< resume.Jml_Wanita << " | " << endl;
-		}
+		cout << resume.jurusan << " | " << resume.TotProdi << " | " 
+		<< resume.JumlahMayoritasPria << " | " << resume.TotalMahasiswaJurusan << endl;
+    }
 	FILE_A.close();
 	FILE_B.close();
-   }
-
+}
  
 
 	
