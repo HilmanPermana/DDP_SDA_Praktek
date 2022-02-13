@@ -1,7 +1,7 @@
 /* 
 	Nama	: Hilman Permana
    	NIM		: 211511015
-   	Tgl		: 5 Februari 2022
+   	Tgl		: 5 Februari 2022 - 8 Februari 2022
    	Struktur Data & Algoritma
 */  
 #include <iostream>
@@ -12,10 +12,11 @@ using namespace std;
 
 
 int main(){
+
 	
 	//inputdata();
 	tampildata();
-	//Resume();
+	Resume();
 
 	return 0;
 }
